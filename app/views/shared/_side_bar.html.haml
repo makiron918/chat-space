@@ -1,0 +1,18 @@
+.chat-side
+  .side-header
+    .side-header__items
+      %p.side-header__items__user-name
+        masa
+      %ul.side-header__items__menu
+        %li.side-header__items__menu__edit-user
+          = link_to "#" do
+            = icon('fa', 'edit')
+        %li.side-header__items__menu__new-group
+          = link_to "#" do
+            = icon('fa', 'cog')
+  .groups
+    .group
+      %p.group__group-name
+        test
+      %p.group__message
+        Hello
