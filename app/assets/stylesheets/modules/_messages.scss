@@ -51,9 +51,11 @@ $blue-color: #38aef0;
       &__group-name{
         font-size: 15px;
         margin-bottom: 5px;
+        color: white;
       }
       &__message{
         font-size: 11px;
+        color: white;
       }
     }
   }
@@ -83,15 +85,15 @@ $blue-color: #38aef0;
         display: flex;
       }
     }
-    a{
-      color: $blue-color;
-      .main-header__edit-btn{
+    .main-header__edit-btn{
         margin: 28px 0 0;
         width: 72px;
         height: 40px;
         line-height: 40px;
         border: solid 1px $blue-color;
         padding: 0 20px;
+        a{
+          color: $blue-color;
       }
     }
   }
@@ -128,7 +130,7 @@ $blue-color: #38aef0;
   height: 90px;
   padding: 20px 40px;
   background-color: #d2d2d2;
-  form {
+  .new__message {
     display: flex;
     .input-box{
       position: relative;
