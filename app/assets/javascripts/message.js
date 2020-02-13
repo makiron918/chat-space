@@ -1,7 +1,7 @@
 $(function(){
   function buildHTML(message){
-    if ( message.image ) {
-      let html = 
+    if ( message.content && message.image ) {
+      var html = 
         `<div class="message" data-message-id=${message.id}>
           <div class="message__info">
             <div class="message__info__member">
@@ -18,9 +18,8 @@ $(function(){
             <img src=${message.image} >
           </div>
         </div>`
-      return html;
-    } else {
-      let html = 
+    } else if (message.content) {
+      var html = 
         `<div class="message" data-message-id=${message.id}>
           <div class="message__info">
             <div class="message__info__member">
@@ -36,9 +35,24 @@ $(function(){
             </p>
           </div>
         </div>`
-      return html;
+    } else if (message.image) {
+      var html = 
+        `<div class="message" data-message-id=${message.id}>
+          <div class="message__info">
+            <div class="message__info__member">
+              ${message.user_name}
+            </div>
+            <div class="message__info__date">
+              ${message.created_at}
+            </div>
+          </div>
+          <div class="message__text">
+            <img src=${message.image} >
+          </div>
+        </div>`
     };
-  }
+    return html;
+  };
   $('#new_message').on('submit', function(e){
     e.preventDefault();
     let formData = new FormData(this);
@@ -52,7 +66,7 @@ $(function(){
       contentType: false
     })
     .done(function(data){
-      let html = buildHTML(data);
+      var html = buildHTML(data);
       $('.messages').append(html);
       $('form')[0].reset();
       $('.messages').animate({ scrollTop: $('.messages')[0].scrollHeight});
@@ -62,4 +76,29 @@ $(function(){
       alert('メッセージ送信に失敗しました');
     })
   });
+  let reloadMessages = function() {
+    last_message_id = $('.message:last').data("message-id");
+    $.ajax({
+      url: "api/messages",
+      type: "GET",
+      dataType: 'json',
+      data: {id: last_message_id}
+    })
+    .done(function(messages) {
+      if (messages.length !== 0){
+        let insertHTML = '';
+        $.each(messages, function(i, message) {
+        insertHTML += buildHTML(message)
+        });
+        $('.messages').append(insertHTML);
+        $('.messages').animate({ scrollTop: $('.messages')[0].scrollHeight});
+      }
+    })
+    .fail(function() {
+      console.log('error');
+    });
+  };
+  if (document.location.href.match(/\/groups\/\d+\/messages/)) {
+    setInterval(reloadMessages, 7000);
+  }
 });
