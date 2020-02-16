@@ -1,4 +1,5 @@
 $(function(){
+  user_ids = []
   function  addUser(user) {
     let html = `
       <div class="chat-group-user clearfix">
@@ -35,7 +36,7 @@ $(function(){
     $.ajax({
       type: "GET",
       url: "/users",
-      data: { keyword: input },
+      data: { keyword: input, id: user_ids},
       dataType: 'json',
     })
     .done(function(users) {
@@ -62,9 +63,14 @@ $(function(){
       .remove();
     addDeleteUser(userName, userId);
     addMember(userId);
+    user_ids.push(userId);
   });
   $(document).on("click", ".chat-group-user__btn--remove", function() {
-    $(this)
+    const userId = $(this).attr("data-user-id")
+    user_ids = user_ids.filter(function( user_id) {
+      return user_id !== userId
+    });
+      $(this)
       .parent()
       .remove();
   });
